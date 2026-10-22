@@ -13,18 +13,21 @@ Cada persona instala **su propia copia**: tus datos y los de tus clientes quedan
 
 ---
 
-## Instalación (unos 15 minutos, sin programar)
+## Instalación (unos 10 minutos, sin programar)
 
-Vas a necesitar cuentas gratis en **GitHub**, **Vercel** y **Neon**.
+Vas a necesitar una cuenta gratis en **GitHub** y otra en **Vercel** (creala con "Continue with GitHub").
 
-### 1. Copiar el proyecto a tu GitHub
+### 1. Tocar el botón
 
-En la página de este repositorio tocá **Use this template → Create a new repository**. Ponele un nombre (ej. `mi-panel`) y dejalo **privado**.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fginopattiweb-oss%2Fcentro-operaciones-agency&project-name=mi-panel&repository-name=mi-panel&env=APP_PASSWORD%2CSESSION_SECRET%2CENCRYPTION_KEY%2CNEXT_PUBLIC_AGENCY_NAME&envDescription=Contrase%C3%B1a%20del%20panel%2C%20dos%20secretos%20de%2064%20caracteres%20y%20el%20nombre%20de%20tu%20agencia&envLink=https%3A%2F%2Fgithub.com%2Fginopattiweb-oss%2Fcentro-operaciones-agency%232-completar-las-variables&stores=%5B%7B%22type%22%3A%22integration%22%2C%22protocol%22%3A%22storage%22%2C%22integrationSlug%22%3A%22neon%22%2C%22productSlug%22%3A%22neon%22%7D%5D)
 
-### 2. Importarlo en Vercel
+Vercel te va a guiar por tres pasos:
 
-1. Entrá a [vercel.com/new](https://vercel.com/new) y elegí el repositorio que acabás de crear.
-2. **Todavía no toques Deploy.** Primero abrí **Environment Variables** y cargá estas cuatro:
+1. **Crear el repositorio** en tu GitHub. Dejalo **privado**: ahí van a quedar tus cambios.
+2. **Crear la base de datos Neon**. Aceptá los valores por defecto y elegí la región más cerca tuyo (ej. `São Paulo` para Latinoamérica).
+3. **Completar las variables** (ver abajo) y tocar **Deploy**.
+
+### 2. Completar las variables
 
 | Variable | Qué poner |
 |---|---|
@@ -33,25 +36,37 @@ En la página de este repositorio tocá **Use this template → Create a new rep
 | `ENCRYPTION_KEY` | **Otro** valor del mismo link (recargá la página para que cambie). Tiene que tener 64 caracteres. No lo cambies nunca después: es lo que cifra los accesos de tus clientes. |
 | `NEXT_PUBLIC_AGENCY_NAME` | El nombre de tu agencia. |
 
-Opcionales recomendadas: `NEXT_PUBLIC_OWNER_NAME` (tu nombre, para el saludo) y `LEGAL_CONTACT_EMAIL`.
+En el deploy el panel crea las tablas solo y deja lista la unidad de tu agencia.
 
-3. Tocá **Deploy**. El primer deploy **va a fallar** porque todavía no hay base de datos. Es normal.
-
-### 3. Crear la base de datos
-
-1. En tu proyecto de Vercel: **Storage → Create Database → Neon (Serverless Postgres)** → Create.
-2. Conectala al proyecto. Vercel carga `DATABASE_URL` sola.
-3. Andá a **Deployments**, tocá los tres puntos del último deploy y elegí **Redeploy**.
-
-En cada deploy el panel crea o actualiza las tablas solo y deja lista la unidad de tu agencia.
-
-### 4. Entrar
+### 3. Entrar
 
 Abrí la URL que te da Vercel (ej. `mi-panel.vercel.app`) y entrá con tu `APP_PASSWORD`.
 
-Por último, cargá `NEXT_PUBLIC_APP_URL` con esa URL (sin barra al final) y volvé a hacer Redeploy.
+### 4. Terminar de personalizar
 
-> Las variables que empiezan con `NEXT_PUBLIC_` se aplican recién en el próximo deploy. Si cambiás el nombre de la agencia, hacé Redeploy.
+En Vercel → tu proyecto → **Settings → Environment Variables**, agregá:
+
+- `NEXT_PUBLIC_APP_URL`: la URL de tu panel, sin barra al final.
+- `NEXT_PUBLIC_OWNER_NAME`: tu nombre, para el saludo.
+- `LEGAL_CONTACT_EMAIL`: tu mail de contacto.
+
+Después andá a **Deployments**, tocá los tres puntos del último deploy y elegí **Redeploy**.
+
+> Cada vez que cambies una variable tenés que hacer **Redeploy** para que se aplique.
+
+<details>
+<summary>¿El botón no te funcionó? Instalación manual</summary>
+
+1. En este repositorio tocá **Use this template → Create a new repository** y dejalo privado.
+2. En [vercel.com/new](https://vercel.com/new) importá ese repositorio, cargá las variables de arriba y tocá **Deploy**. El primer deploy falla porque falta la base de datos: es normal.
+3. En el proyecto: **Storage → Create Database → Neon** → conectala al proyecto.
+4. **Deployments → ⋯ → Redeploy**.
+
+</details>
+
+### Recibir actualizaciones
+
+Tu copia es independiente: las versiones nuevas de este repositorio no te llegan solas. Cuando salga una, se va a avisar en la comunidad cómo traerla. Las tablas se actualizan solas en el deploy.
 
 ---
 
