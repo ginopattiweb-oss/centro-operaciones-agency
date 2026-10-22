@@ -7,6 +7,40 @@ Next.js 15 (App Router, server actions), Drizzle ORM, Postgres en Neon, Tailwind
 Se despliega en Vercel. Quien lo usa probablemente no programa: explicale los
 cambios en lenguaje simple y en español.
 
+## Instalación asistida
+
+Si la persona te pide instalar o correr este repo, guiala con estos pasos, de a
+uno, explicando qué hace cada uno. Las cuentas y contraseñas las pone ella: vos
+abrís los logins (se abren en su navegador) y esperás.
+
+1. **Requisitos**: `node -v` (20 o más) y `git`. Si falta Node, indicale
+   descargarlo de nodejs.org.
+2. **Su propia copia del repo** (no clones el original: necesita un repo suyo
+   para publicar y guardar cambios). Con GitHub CLI logueado (`gh auth login`):
+   `gh repo create <nombre> --template ginopattiweb-oss/centro-operaciones-agency --private --clone`.
+   Sin `gh`: que toque "Use this template" en GitHub y después clonás ese repo.
+3. `npm install`.
+4. **Base de datos Neon**: `npx neonctl@latest auth` (login en el navegador),
+   `npx neonctl@latest projects create --name <nombre> --region-id aws-sa-east-1`
+   y `npx neonctl@latest connection-string --project-id <id>`. Alternativa: que
+   cree el proyecto en neon.tech y te pegue el connection string.
+5. **`.env.local`** a partir de `.env.example`:
+   - `DATABASE_URL`: el del paso 4.
+   - `SESSION_SECRET` y `ENCRYPTION_KEY`: uno distinto cada uno, con `openssl rand -hex 32`.
+   - `APP_PASSWORD` y `NEXT_PUBLIC_AGENCY_NAME`: preguntale.
+   - Pedile que guarde `ENCRYPTION_KEY` en un lugar seguro: si se pierde o se
+     cambia, no se pueden leer los accesos de clientes ya cargados.
+6. `npm run setup` (tablas + datos iniciales) y `npm run dev`. Que entre a
+   http://localhost:3000 con su `APP_PASSWORD`.
+7. **Publicar** (sin esto sus clientes no pueden entrar al portal):
+   `npx vercel@latest login`, `npx vercel@latest link` (proyecto nuevo),
+   `npx vercel@latest git connect` para que cada push despliegue solo, cargar
+   cada variable de `.env.local` con
+   `printf '%s' "<valor>" | npx vercel@latest env add <NOMBRE> production`, y
+   `npx vercel@latest --prod`. Después, `NEXT_PUBLIC_APP_URL` con la URL final y
+   otro `--prod`.
+8. `git push` de lo que haya cambiado (nunca subas `.env.local`: ya está en `.gitignore`).
+
 ## Mapa
 
 | Qué | Dónde |
