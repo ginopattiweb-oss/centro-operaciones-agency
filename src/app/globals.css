@@ -1,0 +1,432 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   Centro de Operaciones — sistema oscuro
+   Panel de analítica denso: fondo casi negro, superficies apenas
+   más claras separadas por hairlines de 1px, número grande como
+   protagonista, color casi sólo para datos.
+
+   Fuente de verdad: los tokens de abajo. Los nombres viejos
+   (--color-*) y los del scope "Sol de Mayo" (--sp-*) quedan como
+   alias que apuntan acá, así las vistas ya escritas se pasan a
+   oscuro sin tocar componente por componente.
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* Superficies */
+  --bg-base: #0a0a0a;
+  --bg-surface: #101012;
+  --bg-surface-2: #16161a;
+  --bg-hover: rgba(255, 255, 255, 0.04);
+
+  /* Bordes */
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  /* Texto */
+  --text-primary: #f5f5f0;
+  --text-secondary: rgba(245, 245, 240, 0.62);
+  --text-tertiary: rgba(245, 245, 240, 0.38);
+
+  /* Acento de interfaz: neutro. El color queda para datos. */
+  --accent: #f5f5f0;
+  --accent-soft: rgba(255, 255, 255, 0.08);
+  --on-accent: #0a0a0a; /* texto sobre el acento neutro */
+
+  /* Series de datos — sólo dentro de gráficos, nunca en UI */
+  --data-1: #4fd1c5;
+  --data-2: #a78bfa;
+  --data-3: #f472b6;
+  --data-4: #60a5fa;
+
+  /* Semántica */
+  --positive: #4ade80;
+  --warning: #fb923c;
+  --negative: #f87171;
+  --neutral: rgba(245, 245, 240, 0.38);
+
+  /* Gradientes — sólo visualización de datos y superficies de vidrio.
+     Nunca en botones, fondos de app ni tarjetas planas. */
+  --grad-series: linear-gradient(90deg, var(--data-1), var(--data-4));
+  --grad-cool: linear-gradient(90deg, var(--data-2), var(--data-3));
+  --grad-ramp: linear-gradient(90deg, var(--positive), var(--warning), var(--negative));
+  --grad-positive: linear-gradient(90deg, #34d399, var(--positive));
+
+  /* Vidrio: sólo capas flotantes (diálogos, drawers, barras fijas). */
+  --glass-bg: rgba(16, 16, 18, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 18px;
+  --scrim: rgba(5, 5, 6, 0.72);
+
+  /* Geometría. Poner --radius-card en 0px devuelve el sistema a flat. */
+  --radius-card: 12px;
+  --radius-control: 8px;
+  --radius-pill: 999px;
+
+  /* Tipografía. Las variables las inyecta el layout raíz con next/font. */
+  --font-sans: var(--font-poppins-co);
+  --font-heading: var(--font-geist-co);
+
+  /* ── Alias del sistema anterior ──────────────────────────
+     Los mantengo para que bg-surface, text-fg, border-border,
+     text-accent-ink, etc. sigan funcionando ya pintados en oscuro.
+     Cuando todas las vistas migren a los tokens nuevos, se borran. */
+  --color-bg: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-border: var(--border-subtle);
+  --color-fg: var(--text-primary);
+  --color-fg-muted: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent); /* en claro era dorado oscuro; ahora el acento neutro */
+  --color-series: var(--data-1); /* marcas de gráfico de las vistas viejas */
+  --color-series-2: var(--data-2);
+  --color-on-accent: var(--on-accent);
+  --color-positive: var(--positive);
+  --color-warning: var(--warning);
+  --color-negative: var(--negative);
+}
+
+@theme inline {
+  /* Tokens nuevos, con prefijo co- para no chocar con los alias de arriba. */
+  --color-co-base: var(--bg-base);
+  --color-co-surface: var(--bg-surface);
+  --color-co-surface-2: var(--bg-surface-2);
+  --color-co-hover: var(--bg-hover);
+
+  --color-co-subtle: var(--border-subtle);
+  --color-co-strong: var(--border-strong);
+
+  --color-co-primary: var(--text-primary);
+  --color-co-secondary: var(--text-secondary);
+  --color-co-tertiary: var(--text-tertiary);
+
+  --color-co-accent: var(--accent);
+  --color-co-accent-soft: var(--accent-soft);
+  --color-co-on-accent: var(--on-accent);
+
+  --color-co-data-1: var(--data-1);
+  --color-co-data-2: var(--data-2);
+  --color-co-data-3: var(--data-3);
+  --color-co-data-4: var(--data-4);
+
+  --color-co-positive: var(--positive);
+  --color-co-warning: var(--warning);
+  --color-co-negative: var(--negative);
+  --color-co-neutral: var(--neutral);
+
+  --radius-co-card: var(--radius-card);
+  --radius-co-control: var(--radius-control);
+  --radius-co-pill: var(--radius-pill);
+
+  --font-co-display: var(--font-geist-co), system-ui, sans-serif;
+  --font-co-body: var(--font-poppins-co), system-ui, sans-serif;
+
+  /* Nombres del sistema anterior. */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-accent: var(--color-accent);
+  --color-accent-ink: var(--color-accent-ink);
+  --color-on-accent: var(--color-on-accent);
+  --color-positive: var(--color-positive);
+  --color-negative: var(--color-negative);
+  --color-fg: var(--color-fg);
+  --color-fg-muted: var(--color-fg-muted);
+  --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-heading: var(--font-heading), system-ui, sans-serif;
+  --radius-card: var(--radius-card);
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-poppins-co), system-ui, sans-serif;
+}
+
+/* Display = Geist, tracking apretado, sin mayúsculas forzadas. */
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+* {
+  transition-property: color, background-color, border-color, opacity;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Radio por defecto de los controles nativos. Va en @layer base para que
+   cualquier utilidad rounded-* de Tailwind lo pueda pisar. */
+@layer base {
+  input:not([type="checkbox"]):not([type="radio"]),
+  select,
+  textarea,
+  button {
+    border-radius: var(--radius-control);
+  }
+}
+
+/* Sin animaciones de entrada; sólo cambios de estado. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Escala tipográfica ─────────────────────────────────────
+   Clases utilitarias del sistema. Viven fuera de cualquier scope
+   porque el sistema oscuro ya es global. */
+.co-title-section {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-size: 32px;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  text-transform: none;
+}
+
+@media (min-width: 768px) {
+  .co-title-section {
+    font-size: 40px;
+  }
+}
+
+.co-title-card {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 500;
+  letter-spacing: normal;
+  color: var(--text-primary);
+  text-transform: none;
+}
+
+/* Micro-label: sólo arriba de un número en una tarjeta de métrica. */
+.co-microlabel {
+  font-family: var(--font-poppins-co), system-ui, sans-serif;
+  font-size: 11px;
+  line-height: 1.2;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-tertiary);
+}
+
+.co-metric {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-size: 40px;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .co-metric {
+    font-size: 56px;
+  }
+}
+
+.co-metric-sm {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .co-metric-sm {
+    font-size: 24px;
+  }
+}
+
+.co-body {
+  font-family: var(--font-poppins-co), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.co-delta {
+  font-family: var(--font-poppins-co), system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+/* ── Barras de progreso y comparación ─────────────────────
+   Track fijo de 6px, fill con gradiente. Es el único lugar de la
+   UI, además de los gráficos, donde se permite gradiente. */
+.co-track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.co-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--grad-series);
+}
+
+.co-fill-ramp {
+  background: var(--grad-ramp);
+}
+
+.co-fill-positive {
+  background: var(--grad-positive);
+}
+
+/* ── Vidrio ───────────────────────────────────────────────
+   Sólo para lo que flota por encima del contenido: diálogos,
+   drawers, sidebar y barras fijas. Las tarjetas del panel siguen
+   opacas: a esa densidad de números el blur cuesta legibilidad. */
+.co-glass,
+.sp .co-glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+}
+
+.co-scrim {
+  background: var(--scrim);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* El scope .co ya no cambia nada respecto del global: queda como
+   marcador de "esta vista está migrada" y para poder anidar. */
+.co {
+  background: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Scope "Sol de Mayo" (.sp) — Agencia y Tareas.
+   Las vistas usan var(--sp-*) inline en cientos de lugares, así que
+   el scope sobrevive como capa de alias sobre los tokens nuevos.
+   No define colores propios: todo apunta al sistema oscuro.
+   ═══════════════════════════════════════════════════════════ */
+.sp {
+  --sp-ink: var(--text-primary); /* texto principal */
+  --sp-on-gold: var(--on-accent); /* texto sobre el acento sólido */
+  --sp-chip-active: var(--accent-soft); /* fondo del chip/tab activo */
+  --sp-bone: var(--bg-surface-2); /* inputs y bloques anidados */
+  --sp-surface: var(--bg-surface); /* tarjetas */
+  --sp-gold: var(--accent); /* acento de UI: neutro, ya no dorado */
+  --sp-gold-btn: var(--accent);
+  --sp-gold-hover: #ffffff;
+  --sp-amber: var(--text-primary);
+  --sp-series: var(--data-1); /* marcas de gráfico: teal */
+  --sp-glow: transparent; /* sin sombras */
+  --sp-pos: var(--positive);
+  --sp-warn: var(--warning); /* naranja, no el dorado viejo */
+  --sp-crit: var(--negative);
+  --sp-line: var(--border-subtle);
+  --sp-line-strong: var(--border-strong);
+  --sp-muted: var(--text-secondary);
+
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-poppins-co), system-ui, sans-serif;
+  font-weight: 400;
+}
+
+.sp :where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.sp .sp-display {
+  font-family: var(--font-geist-co), system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.sp .sp-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+}
+
+.sp .sp-pill {
+  border-radius: var(--radius-pill);
+}
+
+/* Botón primario. Sin sombra: el hover sube el tono. */
+.sp .sp-btn-gold {
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-pill);
+}
+.sp .sp-btn-gold:hover {
+  background: var(--sp-gold-hover);
+}
+
+/* Tarjeta clickeable: el borde sube de opacidad, sin blur. */
+.sp .sp-hover-glow:hover {
+  border-color: var(--border-strong);
+}
+
+.sp input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+@keyframes sp-shimmer {
+  0% { opacity: 0.55; }
+  50% { opacity: 1; }
+  100% { opacity: 0.55; }
+}
+.sp .sp-skeleton {
+  background: var(--bg-surface-2);
+  animation: sp-shimmer 1.4s ease-in-out infinite;
+  border-radius: var(--radius-control);
+}
